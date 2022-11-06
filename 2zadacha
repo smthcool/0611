@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	int m, n = 0;
+	cout << "Введите m: ";
+	cin >> m;
+	cout << "Введите n: ";
+	cin >> n;
+	vector < vector <int> > matrix(m, vector <int>(n));
+	srand(time(NULL));
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+		{
+			matrix[i][j] = 0 + rand() % (5 - 0 + 1);
+		}
+	cout << "Исходная матрица: " << "\r\n";
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+			cout << matrix[i][j] << " ";
+		cout << endl;
+	}
+	//ищем столбцы с кол-вом нулей > 1
+	cout << "Номера столбцов с количеством нулей > 1: ";
+	vector<int> zero_in_cols;
+	for (int i = 0; i < m; i++)
+	{
+		int zero_cnt = 0;
+		for (int j = 0; j < n; j++)
+		{
+			if (matrix[j][i] == 0)
+			{
+				zero_cnt += 1;
+			}
+		}
+		zero_in_cols.push_back(zero_cnt);
+		zero_cnt = 0;
+	}
+	for (int i = 0; i < zero_in_cols.size(); i++)
+	{
+		if (zero_in_cols[i] > 1)
+			cout << i << " ";
+	}
+	cout << "\r\n";
+	cout << "Матрица с переставленными строками по возрастанию значений минимальных элементов: " << "\r\n";
+	//переставляем строки по условию
+	int max, min, buf;
+	vector<int> b(m);
+	for (int i = 0; i < m; i++) //поиск минимальных элементов для каждой строки
+	{
+		min = matrix[i][0];
+		for (int j = 1; j < n; j++)
+			if (min > matrix[i][j]) 
+				min = matrix[i][j];
+		b[i] = min; // запись в масив b (в ячейке с номером равным номеру строки) значение ее максимального элемента
+	}
+	for (int i = 0; i < m - 1; i++) //переформатированние матрицы
+	{
+		min = i;
+		for (int j = i + 1; j < m; j++) //поиск номера строки, начиная с i, с минимальным максимумом
+			if (b[min] > b[j]) min = j;
+		for (int j = 0; j < n; j++) //обмен местами строк массива
+		{
+			buf = matrix[i][j]; //сам обмен строк
+			matrix[i][j] = matrix[min][j];
+			matrix[min][j] = buf;
+		}
+		buf = b[i]; //обмен значений для масива минимумов
+		b[i] = b[min]; //номера минимумов по прежнему соответствует строкам в масиве а
+		b[min] = buf;
+	}
+
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+			cout << matrix[i][j] << " ";
+		cout << endl;
+	}
+}
