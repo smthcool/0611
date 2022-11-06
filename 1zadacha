@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main()
+{
+	setlocale(LC_ALL, "Russian");
+	vector<int> v(10); //исходный вектор
+	vector<int> res; //результирующий вектор
+	srand(time(NULL));
+	for (int i = 0; i < v.size(); i++)
+	{
+		v[i] = 0 + rand() % (20 - 0 + 1);;
+	}
+	cout << "Исходный вектор: ";
+	for (int i = 0; i < v.size(); i++)
+	{
+		cout << v[i] << " ";
+	}
+	cout << "\r\n";
+	//проверяем на простоту числа вектора
+	for (int i = 0; i < v.size(); i++)
+	{
+		int dels = 0;
+		for (int j = 2; j <= sqrt(v[i]); j++)
+		{
+			if (v[i] % j == 0)
+			{
+				dels += 1;
+			}
+		}
+		if (dels == 0 && v[i] != 0)
+			res.push_back(v[i]);
+	}
+	cout <<"Вектор с простыми числами: ";
+	for (int i = 0; i < res.size(); i++)
+	{
+		cout << res[i] << " ";
+	}
+	cout << "\r\n";
+	cout << "Отсортированный вектор: ";
+	//сортировка вставками
+	for (int i = 1; i < res.size(); i++)
+	{
+		int j = i - 1;
+		while (j >= 0 && res[j] > res[j + 1])
+		{
+			swap(res[j], res[j + 1]);
+			j--;
+		}
+	}
+	for (int i = 0; i < res.size(); i++)
+	{
+		cout << res[i] << " ";
+	}
+}
